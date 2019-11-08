@@ -2,5 +2,11 @@
   "name": "task-notificator",
   "version": "1.0.0",
   "main": "app.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "moment": "^2.24.0",
+    "request": "^2.88.0",
+    "trello": "^0.9.1"
+  }
 }
