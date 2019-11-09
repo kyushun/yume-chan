@@ -12,6 +12,11 @@ const DEFAULT_VALUES = {
   Done: { prefix: '😍', priority: 0 },
 };
 
+if (!process.env.TRELLO_TODO_LIST_ID || !process.env.TRELLO_INPROGRESS_LIST_ID || !process.env.TRELLO_PENDING_LIST_ID
+  || !process.env.TRELLO_DONE_LIST_ID || !process.env.TRELLO_API_KEY || !process.env.TRELLO_API_TOKEN) {
+  return console.error(new Error("環境変数設定が不十分です"));
+}
+
 (async () => {
   const todoTasks = await Trello.getTodoCards();
   const inProgressTasks = await Trello.getInProgresCards();
@@ -72,6 +77,8 @@ const DEFAULT_VALUES = {
   }, (error, response, body) => {
     if (error) {
       return console.error(error);
+    } else if (response.statusCode !== 400) {
+      return console.error(new Error(response.statusCode + ' ' + response.statusMessage + ': ' + body));
     }
   });
 })();
