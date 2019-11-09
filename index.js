@@ -49,6 +49,7 @@ exports.postTasksToSlack = async () => {
         priority,
       };
     };
+
     let allTasks = [];
     Array.prototype.push.apply(
       allTasks,
@@ -78,8 +79,6 @@ exports.postTasksToSlack = async () => {
       return task.name + '\n';
     })
     .join('');
-
-  console.log(output);
 
   request(
     {
