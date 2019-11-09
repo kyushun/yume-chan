@@ -23,7 +23,7 @@ if (
   return console.error(new Error('環境変数設定が不十分です'));
 }
 
-(async () => {
+exports.postTasks = async () => {
   const todoTasks = await Trello.getTodoCards();
   const inProgressTasks = await Trello.getInProgresCards();
 
@@ -93,7 +93,7 @@ if (
     (error, response, body) => {
       if (error) {
         return console.error(error);
-      } else if (response.statusCode !== 400) {
+      } else if (response.statusCode !== 200) {
         return console.error(
           new Error(
             response.statusCode + ' ' + response.statusMessage + ': ' + body,
@@ -102,4 +102,8 @@ if (
       }
     },
   );
-})();
+};
+
+if (process.env.NODE_ENV !== 'production') {
+  this.postTasks();
+}
