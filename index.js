@@ -23,7 +23,7 @@ if (
   return console.error(new Error('環境変数設定が不十分です'));
 }
 
-exports.postTasksToSlack = async () => {
+exports.postTasksToSlack = async (req, res) => {
   const todoTasks = await Trello.getTodoCards();
   const inProgressTasks = await Trello.getInProgresCards();
 
@@ -99,6 +99,8 @@ exports.postTasksToSlack = async () => {
           ),
         );
       }
+
+      res.status(response.statusCode).end();
     },
   );
 };
