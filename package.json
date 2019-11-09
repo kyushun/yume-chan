@@ -8,5 +8,11 @@
     "moment": "^2.24.0",
     "request": "^2.88.0",
     "trello": "^0.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.19.0"
   }
 }
