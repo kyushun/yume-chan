@@ -23,7 +23,7 @@ if (
   return console.error(new Error('環境変数設定が不十分です'));
 }
 
-exports.postTasks = async () => {
+exports.postTasksToSlack = async () => {
   const todoTasks = await Trello.getTodoCards();
   const inProgressTasks = await Trello.getInProgresCards();
 
@@ -105,5 +105,5 @@ exports.postTasks = async () => {
 };
 
 if (process.env.NODE_ENV !== 'production') {
-  this.postTasks();
+  this.postTasksToSlack();
 }
