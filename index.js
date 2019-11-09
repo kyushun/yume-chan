@@ -1,7 +1,7 @@
 require('dotenv').config();
-const request = require('request');
 const moment = require('moment');
 const Trello = require('./lib/trello');
+const Slack = require('./lib/slack');
 
 const DEFAULT_VALUES = {
   Expired: { prefix: '😇', priority: 100 },
@@ -11,6 +11,8 @@ const DEFAULT_VALUES = {
   Pending: { prefix: '🤔', priority: 1 },
   Done: { prefix: '😍', priority: 0 },
 };
+
+const isProduction = process.env.NODE_ENV == 'production';
 
 if (
   !process.env.TRELLO_TODO_LIST_ID ||
@@ -80,31 +82,18 @@ exports.postTasksToSlack = async (req, res) => {
     })
     .join('');
 
-  request(
-    {
-      url: process.env.SLACK_WEBHOOK_URL,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text: output,
-      }),
-    },
-    (error, response, body) => {
-      if (error) {
-        return console.error(error);
-      } else if (response.statusCode !== 200) {
-        return console.error(
-          new Error(
-            response.statusCode + ' ' + response.statusMessage + ': ' + body,
-          ),
-        );
-      }
-
-      res.status(response.statusCode).end();
-    },
-  );
+  let statusCode;
+  Slack.postMessage(output)
+    .then(response => {
+      statusCode = response.statusCode;
+    })
+    .catch(error => {
+      statusCode = 500;
+      console.error(error);
+    });
+  if (isProduction) res.status(statusCode).end();
 };
 
-if (process.env.NODE_ENV !== 'production') {
+if (!isProduction) {
   this.postTasksToSlack();
 }
